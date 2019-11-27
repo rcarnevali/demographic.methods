@@ -17,7 +17,6 @@ if(length(.packages[!.inst]) > 0)
 lapply(.packages, require, character.only = T)
 
 #############################################################################################################
-
 Data <- data.frame("age" = seq(0, 75, 5), 
                          "Pop" = c(214089, 190234, 149538, 125040, 113490, 91663, 77711, 72936, 56942, 46205, 
                                    38616, 26154, 29273, 14964, 11205, 16193),
@@ -164,10 +163,10 @@ model <- Data %>%
   lm(formula = Obs.Y ~ Cdn.Ys, data = .)
 
 alpha <- as.double(model$coefficients[1])
-beta<- as.double(model$coefficients[2])
+beta <- as.double(model$coefficients[2])
 
 
-Data %>%
+Data <- Data %>%
   mutate(Fit.Ys = alpha+beta*Cdn.Ys, 
          Fit.lx = 1/(1 + exp(2*Fit.Ys)),
          Fit.lx = replace_na(Fit.lx, 1),
@@ -175,4 +174,4 @@ Data %>%
          Tx = c(rep(rev(cumsum(rev(Tx))), length.out = N-1), (5*Fit.lx[N])+1),
          ex = Tx/Fit.lx) 
 
-end[1,c("Fit.lx","Tx", "ex")] <- NA
+Data[1,c("Fit.lx","Tx", "ex")] <- NA
