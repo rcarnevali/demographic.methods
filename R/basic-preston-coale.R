@@ -6,7 +6,7 @@
 ## Packages ##
 # List of packages for session
 .packages = c("devtools", "data.table", "psych", "tidyverse", "formattable", "rvest","lubridate", "naniar",
-              "cwhmisc","Hmisc", "janitor", "dplyr")
+              "cwhmisc","Hmisc", "janitor", "dplyr", "seasons")
 
 # Install CRAN packages (if not already installed)
 .inst <- .packages %in% installed.packages()
