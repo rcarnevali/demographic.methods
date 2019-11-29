@@ -181,25 +181,25 @@ Data <- LT %>%
          lx.Std = Std/Std[1],
          Cdn.Ys = 0.5*log((lx.Std[1]-lx.Std)/lx.Std)) %>%
   mutate_if(is.numeric, list(~na_if(., -Inf))) %>%
-  right_join(Data, by = "age") %>%
-  select(age, Obs.Y, Cdn.Ys)
+  right_join(Data, by = "age")
 
 
 model <- Data %>%
   filter(age >= minA & 
-           age <= maxA) %>%
+           age <= maxA)  %>%
+  select(age, Obs.Y, Cdn.Ys) %>%
   lm(formula = Obs.Y ~ Cdn.Ys, data = .)
 
 alpha <- as.double(model$coefficients[1])
 beta<- as.double(model$coefficients[2])
 
 
-Data %>%
+Data <- Data %>%
   mutate(Fit.Ys = alpha+beta*Cdn.Ys, 
          Fit.lx = 1/(1 + exp(2*Fit.Ys)),
          Fit.lx = replace_na(Fit.lx, 1),
          Tx = (5*Fit.lx),
-         Tx = c(rep(rev(cumsum(rev(Tx))), length.out = N-1), (5*Fit.lx[N])+1),
+         Tx = c(rep(rev(cumsum(rev(Tx))), length.out = N-1), (5*Fit.lx[N])+1), #Must review the best way to estimate this line. In the spreadsheet ut need to turn the ages until 90+
          ex = Tx/Fit.lx) 
 
 Data[1,c("Fit.lx","Tx", "ex")] <- NA
