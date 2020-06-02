@@ -162,9 +162,8 @@ prestoncoalecolumns <- function (Data = Data, censusyear, lowerage = 15, upperag
                            return(x)
                          })
   
-  do.call(rbind, age_by)
-  
-  Data             <- naniar::replace_with_na_at(Data, .vars = c("Nx","bx", "Y", "abx", "residuals"), condition = ~.x == 0)
+  Data             <- do.call(rbind,age_by)
+  Data             <- naniar::replace_with_na_at(Data, .vars = c("Nx","bx", "Y", "abx", "residual"), condition = ~.x == 0)
   Data$Pop.Ajust   <- ifelse(Data$Age >= minA, Data$Pop * exp( -r * (censusyear - deathsmid)), NA)
   Data$Death.Ajust <- ifelse(Data$Age >= minA, Data$Deaths / c, NA)
   Data$PYL.Ajust   <- ifelse(Data$Age >= minA, Data$Pop.Ajust * deathsperiod, NA)
@@ -432,9 +431,8 @@ prestoncoalecov <- function (Data = Data, censusyear, lowerage = 15, upperage = 
                            return(x)
                          })
   
-  do.call(rbind, age_by)
-  
-  Data             <- naniar::replace_with_na_at(Data, .vars = c("Nx","bx", "Y", "abx", "residuals"), condition = ~.x == 0)
+  Data             <- do.call(rbind,age_by)
+  Data             <- naniar::replace_with_na_at(Data, .vars = c("Nx","bx", "Y", "abx", "residual"), condition = ~.x == 0)
   Data$Pop.Ajust   <- ifelse(Data$Age >= minA, Data$Pop * exp( -r * (censusyear - deathsmid)), NA)
   Data$Death.Ajust <- ifelse(Data$Age >= minA, Data$Deaths / c, NA)
   Data$PYL.Ajust   <- ifelse(Data$Age >= minA, Data$Pop.Ajust * deathsperiod, NA)
@@ -497,7 +495,6 @@ prestoncoalecov <- function (Data = Data, censusyear, lowerage = 15, upperage = 
   }
   
   Data$ex          <- ifelse(Data$Age >= minA, Data$Tx/Data$Fit.lx, Data$Tx <- NA)
-  Data             <- as.data.frame(Data)
   
   # Estimating Est.Nx 
   for(i in nrow(Data):1){
@@ -714,9 +711,8 @@ prestoncoale.ratiosplot <- function (Data = Data, censusyear, lowerage = 15, upp
                            return(x)
                          })
   
-  do.call(rbind, age_by)
-  
-  Data             <- naniar::replace_with_na_at(Data, .vars = c("Nx","bx", "Y", "abx", "residuals"), condition = ~.x == 0)
+  Data             <- do.call(rbind,age_by)
+  Data             <- naniar::replace_with_na_at(Data, .vars = c("Nx","bx", "Y", "abx", "residual"), condition = ~.x == 0)
   Data$Pop.Ajust   <- ifelse(Data$Age >= minA, Data$Pop * exp( -r * (censusyear - deathsmid)), NA)
   Data$Death.Ajust <- ifelse(Data$Age >= minA, Data$Deaths / c, NA)
   Data$PYL.Ajust   <- ifelse(Data$Age >= minA, Data$Pop.Ajust * deathsperiod, NA)
@@ -732,9 +728,7 @@ prestoncoale.ratiosplot <- function (Data = Data, censusyear, lowerage = 15, upp
                   Data$lx[i] <- 1.0, 
                   Data$lx[i] <- Data$lx[i-1] * (1-Data$qx[i-1])))
   }
-  
-  Data             <- as.data.frame(Data)
-  
+
   Data$Obs.Y       <- ifelse(!is.na(Data$lx),
                              ifelse(Data$lx != 0, 0.5 * (log((1 - Data$lx) / Data$lx)), NA),
                              NA)
@@ -779,7 +773,6 @@ prestoncoale.ratiosplot <- function (Data = Data, censusyear, lowerage = 15, upp
   }
   
   Data$ex          <- ifelse(Data$Age >= minA, Data$Tx/Data$Fit.lx, Data$Tx <- NA)
-  Data             <- as.data.frame(Data)
   
   # Estimating Est.Nx 
   for(i in nrow(Data):1){
@@ -842,7 +835,6 @@ prestoncoale.ratiosplot <- function (Data = Data, censusyear, lowerage = 15, upp
     theme(plot.title = element_text(hjust = 0.5), legend.position = "right")
   
   ratios.plot
-  
 }
 
 #############Run all results#################################################
